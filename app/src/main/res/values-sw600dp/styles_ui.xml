@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Widget.Auxio.RecyclerView.Linear.WithAdaptiveFab" parent="Widget.Auxio.RecyclerView.Linear">
+        <item name="android:paddingBottom">@dimen/recycler_fab_space_large</item>
+    </style>
+
     <style name="Widget.Auxio.RecyclerView.Grid.WithAdaptiveFab" parent="Widget.Auxio.RecyclerView.Grid">
         <item name="android:paddingBottom">@dimen/recycler_fab_space_large</item>
     </style>

@@ -183,6 +183,10 @@
         <item name="layoutManager">androidx.recyclerview.widget.LinearLayoutManager</item>
     </style>
 
+    <style name="Widget.Auxio.RecyclerView.Linear.WithAdaptiveFab" parent="Widget.Auxio.RecyclerView.Linear">
+        <item name="android:paddingBottom">@dimen/recycler_fab_space_normal</item>
+    </style>
+
     <style name="Widget.Auxio.RecyclerView.Grid.Base" parent="">
         <item name="layoutManager">androidx.recyclerview.widget.GridLayoutManager</item>
     </style>
