@@ -82,16 +82,87 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }
 
-tasks.register("assembleTaglib", Exec, {
+tasks.register("assembleTaglib") {
     def jniDir = "$projectDir/src/main/cpp"
-    def libs = new File("$jniDir/taglib/pkg")
-    if (libs.exists()) {
-        commandLine "true"
-        return
+    def pkgDir = new File("$jniDir/taglib/pkg")
+    def abis = ["x86", "x86_64", "armeabi-v7a", "arm64-v8a"]
+    def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+    def taglibPackageComplete = {
+        abis.every { arch ->
+            [
+                    new File(pkgDir, "$arch/lib/libtag.a"),
+                    new File(pkgDir, "$arch/include/taglib/tstring.h"),
+                    new File(pkgDir, "$arch/include/taglib/tbytevector.h"),
+                    new File(pkgDir, "$arch/include/taglib/id3v1tag.h")
+            ].every { it.isFile() }
+        }
     }
-    def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
-    commandLine "sh", "-c", "$jniDir/build_taglib.sh $jniDir $ndkDir"
-})
+    inputs.files(fileTree("$jniDir/taglib") {
+        exclude "pkg/**"
+        exclude "build/**"
+    })
+    outputs.dir(pkgDir)
+    outputs.upToDateWhen { taglibPackageComplete() }
+
+    doLast {
+        if (taglibPackageComplete()) return
+
+        def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
+        def sdkDir = androidComponents.sdkComponents.sdkDirectory.get().asFile
+        def cmakeExe = new File(sdkDir, "cmake/3.22.1/bin/${isWindows ? 'cmake.exe' : 'cmake'}")
+        def cmakeCommand = cmakeExe.exists() ? cmakeExe.absolutePath : "cmake"
+        def ninjaExe = new File(cmakeExe.parentFile, isWindows ? "ninja.exe" : "ninja")
+        def hasSdkNinja = cmakeExe.exists() && ninjaExe.exists()
+        def ndkToolchain = new File(jniDir, "android.toolchain.cmake")
+        def cmakePath = { file -> file.absolutePath.replace('\\', '/') }
+
+        abis.each { arch ->
+            println "Building TagLib for $arch..."
+            def dstDir = new File("$jniDir/taglib/build/$arch")
+            def archPkgDir = new File(pkgDir, arch)
+            if (dstDir.exists()) {
+                dstDir.deleteDir()
+            }
+
+            providers.exec {
+                workingDir "$jniDir/taglib"
+                def configureCommand = [
+                        cmakeCommand,
+                        "-B", cmakePath(dstDir),
+                        "-DANDROID_NDK_PATH=${cmakePath(ndkDir)}",
+                        "-DCMAKE_TOOLCHAIN_FILE=${cmakePath(ndkToolchain)}",
+                        "-DANDROID_ABI=$arch",
+                        "-DBUILD_SHARED_LIBS=OFF",
+                        "-DVISIBILITY_HIDDEN=ON",
+                        "-DBUILD_TESTING=OFF",
+                        "-DBUILD_EXAMPLES=OFF",
+                        "-DBUILD_BINDINGS=OFF",
+                        "-DWITH_ZLIB=OFF",
+                        "-DCMAKE_BUILD_TYPE=Release",
+                        "-DWITH_APE=OFF",
+                        "-DWITH_ASF=OFF",
+                        "-DWITH_MOD=OFF",
+                        "-DWITH_SHORTEN=OFF",
+                        "-DWITH_TRUEAUDIO=OFF",
+                        "-DCMAKE_CXX_FLAGS=-fPIC",
+                        "-GNinja"
+                ]
+                if (hasSdkNinja) {
+                    configureCommand += "-DCMAKE_MAKE_PROGRAM=" + cmakePath(ninjaExe)
+                }
+                commandLine configureCommand
+            }.result.get().assertNormalExitValue()
+
+            providers.exec {
+                commandLine cmakeCommand, "--build", cmakePath(dstDir), "--config", "Release", "-j", Runtime.runtime.availableProcessors().toString()
+            }.result.get().assertNormalExitValue()
+
+            providers.exec {
+                commandLine cmakeCommand, "--install", cmakePath(dstDir), "--config", "Release", "--prefix", cmakePath(archPkgDir), "--strip"
+            }.result.get().assertNormalExitValue()
+        }
+    }
+}
 
 afterEvaluate {
     preDebugBuild.dependsOn assembleTaglib

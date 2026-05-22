@@ -28,20 +28,22 @@ set(taglib_location "${CMAKE_CURRENT_SOURCE_DIR}/taglib")
 set(taglib_pkg "${taglib_location}/pkg/${ANDROID_ABI}")
 set(taglib_lib "${taglib_pkg}/lib")
 set(taglib_include "${taglib_pkg}/include")
-
 set(taglib_file_name libtag.a)
-set(taglib_file_path ${taglib_lib}/${taglib_file_name})
-set(taglib_lib_name, "taglib")
-add_library(
-        "taglib"
-        STATIC
-        IMPORTED)
-set_target_properties(
-        "taglib" PROPERTIES
-        IMPORTED_LOCATION
-        ${taglib_file_path}
-        INTERFACE_INCLUDE_DIRECTORIES
-        ${taglib_include})
+set(taglib_file_path "${taglib_lib}/${taglib_file_name}")
+
+if (EXISTS "${taglib_file_path}")
+    add_library(
+            "taglib"
+            STATIC
+            IMPORTED)
+    set_target_properties(
+            "taglib" PROPERTIES
+            IMPORTED_LOCATION
+            ${taglib_file_path}
+            INTERFACE_INCLUDE_DIRECTORIES
+            ${taglib_include})
+endif()
+
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         taglib_jni.cpp
@@ -53,6 +55,20 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         JStringRef.cpp
         JByteArrayRef.cpp
 )
+
+target_include_directories(${CMAKE_PROJECT_NAME}
+        PRIVATE ${taglib_include})
+
+if (TARGET taglib)
+    target_link_libraries(${CMAKE_PROJECT_NAME}
+            # List libraries link to the target library
+            PRIVATE android
+            PRIVATE log
+            PRIVATE taglib)
+else()
+    message(FATAL_ERROR "TagLib static library not found at ${taglib_file_path}. Build it first via the assembleTaglib Gradle task.")
+endif()
+
 target_link_options(${CMAKE_PROJECT_NAME}
         # @Tolriq found that these flags can reduce the size of the linked
         # taglib + jni shim shared library. Kudos to them.
@@ -60,12 +76,3 @@ target_link_options(${CMAKE_PROJECT_NAME}
         # Additionally, enable 16kb page size. I believe taglib can support this fine,
         # as a cursory glance indicates that it doesn't hardcode any page sizes.
         PRIVATE "-Wl,--exclude-libs,ALL,-z,max-page-size=16384")
-
-# Specifies libraries CMake should link to your target library. You
-# can link libraries from various origins, such as libraries defined in this
-# build script, prebuilt third-party libraries, or Android system libraries.
-target_link_libraries(${CMAKE_PROJECT_NAME}
-        # List libraries link to the target library
-        PRIVATE android
-        PRIVATE log
-        PRIVATE taglib)
