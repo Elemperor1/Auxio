@@ -82,16 +82,78 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }
 
-tasks.register("assembleTaglib", Exec, {
+tasks.register("assembleTaglib") {
     def jniDir = "$projectDir/src/main/cpp"
-    def libs = new File("$jniDir/taglib/pkg")
-    if (libs.exists()) {
-        commandLine "true"
-        return
+    def pkgDir = new File("$jniDir/taglib/pkg")
+    def abis = ["x86", "x86_64", "armeabi-v7a", "arm64-v8a"]
+    def taglibPackageComplete = {
+        abis.every { arch ->
+            [
+                    new File(pkgDir, "$arch/lib/libtag.a"),
+                    new File(pkgDir, "$arch/include/taglib/tstring.h"),
+                    new File(pkgDir, "$arch/include/taglib/tbytevector.h"),
+                    new File(pkgDir, "$arch/include/taglib/id3v1tag.h")
+            ].every { it.isFile() }
+        }
     }
-    def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
-    commandLine "sh", "-c", "$jniDir/build_taglib.sh $jniDir $ndkDir"
-})
+    inputs.dir("$jniDir/taglib")
+    outputs.dir(pkgDir)
+    outputs.upToDateWhen { taglibPackageComplete() }
+
+    doLast {
+        if (taglibPackageComplete()) return
+
+        def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
+        def cmakeExe = new File(androidComponents.sdkComponents.sdkDirectory.get().asFile, "cmake/3.22.1/bin/cmake.exe")
+        if (!cmakeExe.exists()) {
+            // Fallback to searching in PATH if specific version isn't found
+            cmakeExe = new File("cmake")
+        }
+        def ndkToolchain = new File(jniDir, "android.toolchain.cmake")
+        def cmakePath = { file -> file.absolutePath.replace('\\', '/') }
+
+        abis.each { arch ->
+            println "Building TagLib for $arch..."
+            def dstDir = new File("$jniDir/taglib/build/$arch")
+            def archPkgDir = new File(pkgDir, arch)
+            if (dstDir.exists()) {
+                dstDir.deleteDir()
+            }
+
+            providers.exec {
+                workingDir "$jniDir/taglib"
+                commandLine cmakeExe.absolutePath,
+                        "-B", cmakePath(dstDir),
+                        "-DANDROID_NDK_PATH=${cmakePath(ndkDir)}",
+                        "-DCMAKE_TOOLCHAIN_FILE=${cmakePath(ndkToolchain)}",
+                        "-DANDROID_ABI=$arch",
+                        "-DBUILD_SHARED_LIBS=OFF",
+                        "-DVISIBILITY_HIDDEN=ON",
+                        "-DBUILD_TESTING=OFF",
+                        "-DBUILD_EXAMPLES=OFF",
+                        "-DBUILD_BINDINGS=OFF",
+                        "-DWITH_ZLIB=OFF",
+                        "-DCMAKE_BUILD_TYPE=Release",
+                        "-DWITH_APE=OFF",
+                        "-DWITH_ASF=OFF",
+                        "-DWITH_MOD=OFF",
+                        "-DWITH_SHORTEN=OFF",
+                        "-DWITH_TRUEAUDIO=OFF",
+                        "-DCMAKE_CXX_FLAGS=-fPIC",
+                        "-GNinja",
+                        "-DCMAKE_MAKE_PROGRAM=" + cmakePath(new File(cmakeExe.parentFile, "ninja.exe"))
+            }.result.get().assertNormalExitValue()
+
+            providers.exec {
+                commandLine cmakeExe.absolutePath, "--build", cmakePath(dstDir), "--config", "Release", "-j", Runtime.runtime.availableProcessors().toString()
+            }.result.get().assertNormalExitValue()
+
+            providers.exec {
+                commandLine cmakeExe.absolutePath, "--install", cmakePath(dstDir), "--config", "Release", "--prefix", cmakePath(archPkgDir), "--strip"
+            }.result.get().assertNormalExitValue()
+        }
+    }
+}
 
 afterEvaluate {
     preDebugBuild.dependsOn assembleTaglib
