@@ -86,6 +86,7 @@ tasks.register("assembleTaglib") {
     def jniDir = "$projectDir/src/main/cpp"
     def pkgDir = new File("$jniDir/taglib/pkg")
     def abis = ["x86", "x86_64", "armeabi-v7a", "arm64-v8a"]
+    def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
     def taglibPackageComplete = {
         abis.every { arch ->
             [
@@ -96,7 +97,10 @@ tasks.register("assembleTaglib") {
             ].every { it.isFile() }
         }
     }
-    inputs.dir("$jniDir/taglib")
+    inputs.files(fileTree("$jniDir/taglib") {
+        exclude "pkg/**"
+        exclude "build/**"
+    })
     outputs.dir(pkgDir)
     outputs.upToDateWhen { taglibPackageComplete() }
 
@@ -104,11 +108,11 @@ tasks.register("assembleTaglib") {
         if (taglibPackageComplete()) return
 
         def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
-        def cmakeExe = new File(androidComponents.sdkComponents.sdkDirectory.get().asFile, "cmake/3.22.1/bin/cmake.exe")
-        if (!cmakeExe.exists()) {
-            // Fallback to searching in PATH if specific version isn't found
-            cmakeExe = new File("cmake")
-        }
+        def sdkDir = androidComponents.sdkComponents.sdkDirectory.get().asFile
+        def cmakeExe = new File(sdkDir, "cmake/3.22.1/bin/${isWindows ? 'cmake.exe' : 'cmake'}")
+        def cmakeCommand = cmakeExe.exists() ? cmakeExe.absolutePath : "cmake"
+        def ninjaExe = new File(cmakeExe.parentFile, isWindows ? "ninja.exe" : "ninja")
+        def hasSdkNinja = cmakeExe.exists() && ninjaExe.exists()
         def ndkToolchain = new File(jniDir, "android.toolchain.cmake")
         def cmakePath = { file -> file.absolutePath.replace('\\', '/') }
 
@@ -122,7 +126,8 @@ tasks.register("assembleTaglib") {
 
             providers.exec {
                 workingDir "$jniDir/taglib"
-                commandLine cmakeExe.absolutePath,
+                def configureCommand = [
+                        cmakeCommand,
                         "-B", cmakePath(dstDir),
                         "-DANDROID_NDK_PATH=${cmakePath(ndkDir)}",
                         "-DCMAKE_TOOLCHAIN_FILE=${cmakePath(ndkToolchain)}",
@@ -140,16 +145,20 @@ tasks.register("assembleTaglib") {
                         "-DWITH_SHORTEN=OFF",
                         "-DWITH_TRUEAUDIO=OFF",
                         "-DCMAKE_CXX_FLAGS=-fPIC",
-                        "-GNinja",
-                        "-DCMAKE_MAKE_PROGRAM=" + cmakePath(new File(cmakeExe.parentFile, "ninja.exe"))
+                        "-GNinja"
+                ]
+                if (hasSdkNinja) {
+                    configureCommand += "-DCMAKE_MAKE_PROGRAM=" + cmakePath(ninjaExe)
+                }
+                commandLine configureCommand
             }.result.get().assertNormalExitValue()
 
             providers.exec {
-                commandLine cmakeExe.absolutePath, "--build", cmakePath(dstDir), "--config", "Release", "-j", Runtime.runtime.availableProcessors().toString()
+                commandLine cmakeCommand, "--build", cmakePath(dstDir), "--config", "Release", "-j", Runtime.runtime.availableProcessors().toString()
             }.result.get().assertNormalExitValue()
 
             providers.exec {
-                commandLine cmakeExe.absolutePath, "--install", cmakePath(dstDir), "--config", "Release", "--prefix", cmakePath(archPkgDir), "--strip"
+                commandLine cmakeCommand, "--install", cmakePath(dstDir), "--config", "Release", "--prefix", cmakePath(archPkgDir), "--strip"
             }.result.get().assertNormalExitValue()
         }
     }

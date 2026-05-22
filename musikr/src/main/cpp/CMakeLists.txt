@@ -28,10 +28,10 @@ set(taglib_location "${CMAKE_CURRENT_SOURCE_DIR}/taglib")
 set(taglib_pkg "${taglib_location}/pkg/${ANDROID_ABI}")
 set(taglib_lib "${taglib_pkg}/lib")
 set(taglib_include "${taglib_pkg}/include")
+set(taglib_file_name libtag.a)
+set(taglib_file_path "${taglib_lib}/${taglib_file_name}")
 
-if (EXISTS "${taglib_pkg}")
-    set(taglib_file_name libtag.a)
-    set(taglib_file_path ${taglib_lib}/${taglib_file_name})
+if (EXISTS "${taglib_file_path}")
     add_library(
             "taglib"
             STATIC
@@ -66,10 +66,7 @@ if (TARGET taglib)
             PRIVATE log
             PRIVATE taglib)
 else()
-    target_link_libraries(${CMAKE_PROJECT_NAME}
-            # List libraries link to the target library
-            PRIVATE android
-            PRIVATE log)
+    message(FATAL_ERROR "TagLib static library not found at ${taglib_file_path}. Build it first via the assembleTaglib Gradle task.")
 endif()
 
 target_link_options(${CMAKE_PROJECT_NAME}
