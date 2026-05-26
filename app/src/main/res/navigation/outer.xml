@@ -16,6 +16,9 @@
         <action
             android:id="@+id/about"
             app:destination="@id/about_fragment" />
+        <action
+            android:id="@+id/security_password_dialog"
+            app:destination="@id/security_password_dialog" />
     </fragment>
     <fragment
         android:id="@+id/root_preferences_fragment"
@@ -33,6 +36,12 @@
         <action
             android:id="@+id/audio_peferences"
             app:destination="@id/audio_preferences_fragment" />
+        <action
+            android:id="@+id/security_preferences"
+            app:destination="@id/security_preferences_fragment" />
+        <action
+            android:id="@+id/security_password_dialog"
+            app:destination="@id/security_password_dialog" />
         <action
             android:id="@+id/music_locations_settings"
             app:destination="@id/music_locations_dialog" />
@@ -74,6 +83,11 @@
             app:destination="@id/pre_amp_dialog" />
     </fragment>
 
+    <fragment
+        android:id="@+id/security_preferences_fragment"
+        android:name="org.oxycblt.auxio.settings.categories.SecurityPreferenceFragment"
+        android:label="security_preferences_fragment" />
+
     <dialog
         android:id="@+id/accent_dialog"
         android:name="org.oxycblt.auxio.ui.accent.AccentCustomizeDialog"
@@ -105,4 +119,10 @@
         android:name="org.oxycblt.auxio.settings.AboutFragment"
         android:label="dialog_about"
         tools:layout="@layout/fragment_about" />
+
+    <dialog
+        android:id="@+id/security_password_dialog"
+        android:name="org.oxycblt.auxio.settings.SecurityPasswordDialog"
+        android:label="security_password_dialog"
+        tools:layout="@layout/dialog_password" />
 </navigation>

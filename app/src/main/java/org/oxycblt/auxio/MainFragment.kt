@@ -48,6 +48,8 @@ import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.detail.Show
 import org.oxycblt.auxio.home.HomeViewModel
 import org.oxycblt.auxio.home.Outer
+import org.oxycblt.auxio.settings.SecurityViewModel
+import org.oxycblt.auxio.settings.SecurityAction
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicType
@@ -87,6 +89,7 @@ class MainFragment :
     private val homeModel: HomeViewModel by activityViewModels()
     private val listModel: ListViewModel by activityViewModels()
     private val playbackModel: PlaybackViewModel by activityViewModels()
+    private val securityModel: SecurityViewModel by activityViewModels()
     private var sheetBackCallback: SheetBackPressedCallback? = null
     private var detailBackCallback: DetailBackPressedCallback? = null
     private var selectionBackCallback: SelectionBackPressedCallback? = null
@@ -211,6 +214,14 @@ class MainFragment :
         collect(detailModel.toShow.flow, ::handleShow)
         collectImmediately(detailModel.editedPlaylist, detailBackCallback::invalidateEnabled)
         collectImmediately(homeModel.showOuter.flow, ::handleShowOuter)
+        collectImmediately(securityModel.verificationResult.flow) {
+            if (it == true) {
+                securityModel.verificationResult.consume()
+                securityModel.pendingAction.consume()?.let { action ->
+                    binding.root.post { action.run() }
+                }
+            }
+        }
         collectImmediately(homeModel.currentTabType, ::updateCurrentTab)
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
         collectImmediately(musicModel.indexingState, ::updateIndexerState)
@@ -384,17 +395,24 @@ class MainFragment :
     }
 
     override fun onActionSelected(actionItem: SpeedDialActionItem): Boolean {
-        when (actionItem.id) {
-            R.id.action_new_playlist -> {
-                L.d("Creating playlist")
-                musicModel.createPlaylist()
+        securityModel.runProtected {
+            when (actionItem.id) {
+                R.id.action_new_playlist -> {
+                    L.d("Creating playlist")
+                    musicModel.createPlaylist()
+                }
+                R.id.action_import_playlist -> {
+                    L.d("Importing playlist")
+                    musicModel.importPlaylist()
+                }
+                else -> {}
             }
-            R.id.action_import_playlist -> {
-                L.d("Importing playlist")
-                musicModel.importPlaylist()
-            }
-            else -> {}
         }
+
+        if (securityModel.pendingAction.flow.value != null) {
+            findNavController().navigateSafe(MainFragmentDirections.securityPasswordDialog())
+        }
+
         // Returning false to close the speed dial results in no animation, manually close instead.
         // Adapted from Material Files: https://github.com/zhanghai/MaterialFiles
         requireBinding().homeNewPlaylistFab.close()
@@ -559,13 +577,18 @@ class MainFragment :
     }
 
     private fun handleShowOuter(outer: Outer?) {
-        val directions =
-            when (outer) {
-                is Outer.Settings -> MainFragmentDirections.preferences()
-                is Outer.About -> MainFragmentDirections.about()
-                null -> return
-            }
-        findNavController().navigateSafe(directions)
+        if (outer == null) return
+        securityModel.runProtected {
+            val directions =
+                when (outer) {
+                    is Outer.Settings -> MainFragmentDirections.preferences()
+                    is Outer.About -> MainFragmentDirections.about()
+                }
+            findNavController().navigateSafe(directions)
+        }
+        if (securityModel.pendingAction.flow.value != null) {
+            findNavController().navigateSafe(MainFragmentDirections.securityPasswordDialog())
+        }
         homeModel.showOuter.consume()
     }
 

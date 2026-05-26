@@ -90,6 +90,9 @@
         <action
             android:id="@+id/choose_locations"
             app:destination="@id/music_locations_dialog" />
+        <action
+            android:id="@+id/security_password_dialog"
+            app:destination="@id/security_password_dialog" />
     </fragment>
 
     <dialog
@@ -400,6 +403,9 @@
         <action
             android:id="@+id/play_from_genre"
             app:destination="@id/play_from_genre_dialog" />
+        <action
+            android:id="@+id/security_password_dialog"
+            app:destination="@id/security_password_dialog" />
     </fragment>
 
     <dialog
@@ -573,4 +579,10 @@
         android:name="org.oxycblt.auxio.music.locations.LocationsDialog"
         android:label="music_locations_dialog"
         tools:layout="@layout/dialog_music_locations" />
+
+    <dialog
+        android:id="@+id/security_password_dialog"
+        android:name="org.oxycblt.auxio.settings.SecurityPasswordDialog"
+        android:label="security_password_dialog"
+        tools:layout="@layout/dialog_password" />
 </navigation>

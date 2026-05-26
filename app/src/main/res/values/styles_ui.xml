@@ -191,7 +191,10 @@
         <item name="layoutManager">androidx.recyclerview.widget.GridLayoutManager</item>
     </style>
 
-    <style name="Widget.Auxio.RecyclerView.Grid" parent="Widget.Auxio.RecyclerView.Grid.Base" />
+    <style name="Widget.Auxio.RecyclerView.Grid" parent="Widget.Auxio.RecyclerView.Grid.Base">
+        <item name="android:padding">@dimen/grid_spacing</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
 
     <style name="Widget.Auxio.RecyclerView.Grid.WithAdaptiveFab" parent="Widget.Auxio.RecyclerView.Grid">
         <item name="android:paddingBottom">@dimen/recycler_fab_space_normal</item>

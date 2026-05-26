@@ -23,6 +23,7 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -37,6 +38,7 @@ import org.oxycblt.auxio.list.ListFragment
 import org.oxycblt.auxio.list.menu.Menu
 import org.oxycblt.auxio.music.PlaylistDecision
 import org.oxycblt.auxio.music.PlaylistMessage
+import org.oxycblt.auxio.settings.SecurityViewModel
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.playback.PlaybackDecision
 import org.oxycblt.auxio.playback.formatDurationMs
@@ -70,6 +72,7 @@ class PlaylistDetailFragment :
     private var editNavigationListener: DialogAwareNavigationListener? = null
     private var getContentLauncher: ActivityResultLauncher<String>? = null
     private var pendingImportTarget: Playlist? = null
+    private val securityModel: SecurityViewModel by activityViewModels()
 
     override fun getDetailListAdapter() = playlistListAdapter
 
@@ -124,6 +127,14 @@ class PlaylistDetailFragment :
             playbackModel.isPlaying,
             ::updatePlayback,
         )
+        collectImmediately(securityModel.verificationResult.flow) {
+            if (it == true) {
+                securityModel.verificationResult.consume()
+                securityModel.pendingAction.consume()?.let { action ->
+                    binding.root.post { action.run() }
+                }
+            }
+        }
         collect(playbackModel.playbackDecision.flow, ::handlePlaybackDecision)
     }
 
@@ -133,7 +144,11 @@ class PlaylistDetailFragment :
         }
 
         if (item.itemId == R.id.action_save) {
-            detailModel.savePlaylistEdit()
+            securityModel.runProtected { detailModel.savePlaylistEdit() }
+            if (securityModel.pendingAction.flow.value != null) {
+                findNavController()
+                    .navigateSafe(PlaylistDetailFragmentDirections.securityPasswordDialog())
+            }
             return true
         }
 
@@ -178,7 +193,11 @@ class PlaylistDetailFragment :
     }
 
     override fun onStartEdit() {
-        detailModel.startPlaylistEdit()
+        securityModel.runProtected { detailModel.startPlaylistEdit() }
+        if (securityModel.pendingAction.flow.value != null) {
+            findNavController()
+                .navigateSafe(PlaylistDetailFragmentDirections.securityPasswordDialog())
+        }
     }
 
     override fun onPickUp(viewHolder: RecyclerView.ViewHolder) {

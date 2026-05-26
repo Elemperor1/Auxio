@@ -48,6 +48,8 @@
     <dimen name="recycler_fab_space_normal">88dp</dimen>
     <dimen name="recycler_fab_space_large">128dp</dimen>
 
+    <dimen name="grid_spacing">8dp</dimen>
+
     <dimen name="widget_def_width">180dp</dimen>
     <dimen name="widget_def_height">100dp</dimen>
 
