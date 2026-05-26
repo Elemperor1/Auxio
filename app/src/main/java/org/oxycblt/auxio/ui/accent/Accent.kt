@@ -40,6 +40,7 @@ private val accentNames =
         R.string.clr_orange,
         R.string.clr_brown,
         R.string.clr_grey,
+        R.string.clr_official,
         R.string.clr_dynamic,
     )
 
@@ -61,6 +62,7 @@ private val accentThemes =
         R.style.Theme_Auxio_Orange,
         R.style.Theme_Auxio_Brown,
         R.style.Theme_Auxio_Grey,
+        R.style.Theme_Auxio_Official,
         R.style.Theme_Auxio_App, // Dynamic colors are on the base theme
     )
 
@@ -82,6 +84,7 @@ private val accentBlackThemes =
         R.style.Theme_Auxio_Orange_Black,
         R.style.Theme_Auxio_Brown_Black,
         R.style.Theme_Auxio_Grey_Black,
+        R.style.Theme_Auxio_Official_Black,
         R.style.Theme_Auxio_Black, // Dynamic colors are on the base theme
     )
 
@@ -103,6 +106,7 @@ private val accentPrimaryColors =
         R.color.orange_primary,
         R.color.brown_primary,
         R.color.grey_primary,
+        R.color.official_primary,
         R.color.dynamic_primary,
     )
 
@@ -159,8 +163,8 @@ class Accent private constructor(val index: Int) {
                 // Use dynamic coloring on devices that support it.
                 accentThemes.lastIndex
             } else {
-                // Use blue everywhere else.
-                5
+                // Use Official branding everywhere else.
+                accentThemes.lastIndex - 1
             }
 
         /** The amount of valid accents. */
