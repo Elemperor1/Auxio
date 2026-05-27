@@ -25,14 +25,12 @@ import android.view.MenuItem
 import androidx.appcompat.view.SupportMenuInflater
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.children
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import org.oxycblt.auxio.databinding.DialogMenuBinding
 import org.oxycblt.auxio.list.ClickableListListener
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
-import org.oxycblt.auxio.settings.SecurityViewModel
 import org.oxycblt.auxio.ui.ViewBindingBottomSheetDialogFragment
 import org.oxycblt.auxio.util.collectImmediately
 import timber.log.Timber as L
@@ -49,7 +47,6 @@ abstract class MenuDialogFragment<M : Menu> :
     ViewBindingBottomSheetDialogFragment<DialogMenuBinding>(), ClickableListListener<MenuItem> {
     protected abstract val menuModel: MenuViewModel
     protected abstract val listModel: ListViewModel
-    protected val securityModel: SecurityViewModel by activityViewModels()
     private val menuAdapter = MenuItemAdapter(@Suppress("LeakingThis") this)
 
     abstract val parcel: Menu.Parcel

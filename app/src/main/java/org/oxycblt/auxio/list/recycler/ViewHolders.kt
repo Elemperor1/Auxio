@@ -25,8 +25,8 @@ import com.google.android.material.divider.MaterialDivider
 import org.oxycblt.auxio.IntegerTable
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.ItemHeaderBinding
-import org.oxycblt.auxio.databinding.ItemParentGridBinding
-import org.oxycblt.auxio.databinding.ItemSongGridBinding
+import org.oxycblt.auxio.databinding.ItemParentBinding
+import org.oxycblt.auxio.databinding.ItemSongBinding
 import org.oxycblt.auxio.list.BasicHeader
 import org.oxycblt.auxio.list.PlainDivider
 import org.oxycblt.auxio.list.SelectableListListener
@@ -49,7 +49,7 @@ import org.oxycblt.musikr.Song
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
-class SongViewHolder private constructor(private val binding: ItemSongGridBinding) :
+class SongViewHolder private constructor(private val binding: ItemSongBinding) :
     SelectionIndicatorAdapter.ViewHolder(binding.root) {
     /**
      * Bind new data to this instance.
@@ -83,7 +83,7 @@ class SongViewHolder private constructor(private val binding: ItemSongGridBindin
          * @param parent The parent to inflate this instance from.
          * @return A new instance.
          */
-        fun from(parent: View) = SongViewHolder(ItemSongGridBinding.inflate(parent.context.inflater))
+        fun from(parent: View) = SongViewHolder(ItemSongBinding.inflate(parent.context.inflater))
 
         /** A comparator that can be used with DiffUtil. */
         val DIFF_CALLBACK =
@@ -99,7 +99,7 @@ class SongViewHolder private constructor(private val binding: ItemSongGridBindin
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
-class AlbumViewHolder private constructor(private val binding: ItemParentGridBinding) :
+class AlbumViewHolder private constructor(private val binding: ItemParentBinding) :
     SelectionIndicatorAdapter.ViewHolder(binding.root) {
     /**
      * Bind new data to this instance.
@@ -133,7 +133,7 @@ class AlbumViewHolder private constructor(private val binding: ItemParentGridBin
          * @param parent The parent to inflate this instance from.
          * @return A new instance.
          */
-        fun from(parent: View) = AlbumViewHolder(ItemParentGridBinding.inflate(parent.context.inflater))
+        fun from(parent: View) = AlbumViewHolder(ItemParentBinding.inflate(parent.context.inflater))
 
         /** A comparator that can be used with DiffUtil. */
         val DIFF_CALLBACK =
@@ -151,7 +151,7 @@ class AlbumViewHolder private constructor(private val binding: ItemParentGridBin
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
-class ArtistViewHolder private constructor(private val binding: ItemParentGridBinding) :
+class ArtistViewHolder private constructor(private val binding: ItemParentBinding) :
     SelectionIndicatorAdapter.ViewHolder(binding.root) {
     /**
      * Bind new data to this instance.
@@ -199,7 +199,7 @@ class ArtistViewHolder private constructor(private val binding: ItemParentGridBi
          * @return A new instance.
          */
         fun from(parent: View) =
-            ArtistViewHolder(ItemParentGridBinding.inflate(parent.context.inflater))
+            ArtistViewHolder(ItemParentBinding.inflate(parent.context.inflater))
 
         /** A comparator that can be used with DiffUtil. */
         val DIFF_CALLBACK =
@@ -217,7 +217,7 @@ class ArtistViewHolder private constructor(private val binding: ItemParentGridBi
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
-class GenreViewHolder private constructor(private val binding: ItemParentGridBinding) :
+class GenreViewHolder private constructor(private val binding: ItemParentBinding) :
     SelectionIndicatorAdapter.ViewHolder(binding.root) {
     /**
      * Bind new data to this instance.
@@ -256,7 +256,7 @@ class GenreViewHolder private constructor(private val binding: ItemParentGridBin
          * @param parent The parent to inflate this instance from.
          * @return A new instance.
          */
-        fun from(parent: View) = GenreViewHolder(ItemParentGridBinding.inflate(parent.context.inflater))
+        fun from(parent: View) = GenreViewHolder(ItemParentBinding.inflate(parent.context.inflater))
 
         /** A comparator that can be used with DiffUtil. */
         val DIFF_CALLBACK =
@@ -274,7 +274,7 @@ class GenreViewHolder private constructor(private val binding: ItemParentGridBin
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
-class PlaylistViewHolder private constructor(private val binding: ItemParentGridBinding) :
+class PlaylistViewHolder private constructor(private val binding: ItemParentBinding) :
     SelectionIndicatorAdapter.ViewHolder(binding.root) {
     /**
      * Bind new data to this instance.
@@ -314,7 +314,7 @@ class PlaylistViewHolder private constructor(private val binding: ItemParentGrid
          * @return A new instance.
          */
         fun from(parent: View) =
-            PlaylistViewHolder(ItemParentGridBinding.inflate(parent.context.inflater))
+            PlaylistViewHolder(ItemParentBinding.inflate(parent.context.inflater))
 
         /** A comparator that can be used with DiffUtil. */
         val DIFF_CALLBACK =

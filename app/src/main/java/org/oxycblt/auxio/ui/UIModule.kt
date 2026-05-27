@@ -22,12 +22,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.oxycblt.auxio.settings.SecuritySettings
-import org.oxycblt.auxio.settings.SecuritySettingsImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface UIModule {
     @Binds fun settings(uiSettings: UISettingsImpl): UISettings
-    @Binds fun security(securitySettings: SecuritySettingsImpl): SecuritySettings
 }
