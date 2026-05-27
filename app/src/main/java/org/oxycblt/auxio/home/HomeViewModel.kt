@@ -144,7 +144,8 @@ constructor(
     var currentTabTypes = currentHomeTabs()
         private set
 
-    private val _currentTabType = MutableStateFlow(currentTabTypes.first())
+    private val _currentTabType =
+        MutableStateFlow(currentTabTypes.firstOrNull() ?: MusicType.SONGS)
     /** The [MusicType] of the currently shown [Tab]. */
     val currentTabType: StateFlow<MusicType> = _currentTabType
 
@@ -210,7 +211,7 @@ constructor(
     override fun invalidateTabs() {
         currentTabTypes = currentHomeTabs()
         if (_currentTabType.value !in currentTabTypes) {
-            _currentTabType.value = currentTabTypes.first()
+            _currentTabType.value = currentTabTypes.firstOrNull() ?: MusicType.SONGS
         }
         _shouldRecreate.put(Unit)
     }
