@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
@@ -5,37 +6,30 @@
     android:viewportHeight="108">
 
     <group
-        android:scaleX="2.835"
-        android:scaleY="2.835"
-        android:translateX="19.98"
-        android:translateY="19.98">
+        android:pivotX="54"
+        android:pivotY="54">
         <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,17 -3,3 -3,-3 3,-3"
-            android:strokeWidth="2"
-            android:strokeColor="#004894"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M48,16h12v24h-12z" />
         <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="M 13,10.5 V 17"
-            android:strokeWidth="2"
-            android:strokeColor="#1a61ae"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M48,68h12v24h-12z" />
         <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,4v 6.5"
-            android:strokeWidth="2"
-            android:strokeColor="#357ac9"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M16,48h24v12h-24z" />
         <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,4 4,4"
-            android:strokeWidth="2"
-            android:strokeColor="#5093e4"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M68,48h24v12h-24z" />
+
+        <group android:rotation="45" android:pivotX="54" android:pivotY="54">
+            <path android:fillColor="#FFFFFFFF" android:pathData="M48,16h12v24h-12z" />
+            <path android:fillColor="#FFFFFFFF" android:pathData="M48,68h12v24h-12z" />
+            <path android:fillColor="#FFFFFFFF" android:pathData="M16,48h24v12h-24z" />
+            <path android:fillColor="#FFFFFFFF" android:pathData="M68,48h24v12h-24z" />
+        </group>
+
+        <path
+            android:fillColor="#147F91"
+            android:pathData="M54,40A14,14 0 1,1 54,68A14,14 0 1,1 54,40z" />
     </group>
 </vector>
