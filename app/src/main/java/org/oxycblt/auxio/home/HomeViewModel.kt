@@ -21,6 +21,8 @@ package org.oxycblt.auxio.home
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.oxycblt.auxio.home.tabs.Tab
@@ -288,8 +290,8 @@ constructor(
     }
 }
 
-sealed interface Outer {
-    data object Settings : Outer
+sealed interface Outer : Parcelable {
+    @Parcelize data object Settings : Outer
 
-    data object About : Outer
+    @Parcelize data object About : Outer
 }

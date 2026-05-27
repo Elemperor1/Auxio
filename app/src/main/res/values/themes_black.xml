@@ -173,4 +173,15 @@
         <item name="colorSurfaceContainerHigh">@color/grey_surfaceContainerHigh_black</item>
         <item name="colorSurfaceContainerHighest">@color/grey_surfaceContainerHighest_black</item>
     </style>
+
+    <style name="Theme.Auxio.Official.Black" parent="Theme.Auxio.Official">
+        <item name="colorSurface">@color/official_surface_black</item>
+        <item name="colorSurfaceDim">@color/official_surfaceDim_black</item>
+        <item name="colorSurfaceBright">@color/official_surfaceBright_black</item>
+        <item name="colorSurfaceContainerLowest">@color/official_surfaceContainerLowest_black</item>
+        <item name="colorSurfaceContainerLow">@color/official_surfaceContainerLow_black</item>
+        <item name="colorSurfaceContainer">@color/official_surfaceContainer_black</item>
+        <item name="colorSurfaceContainerHigh">@color/official_surfaceContainerHigh_black</item>
+        <item name="colorSurfaceContainerHighest">@color/official_surfaceContainerHighest_black</item>
+    </style>
 </resources>

@@ -71,6 +71,7 @@ class GenreListFragment :
 
         binding.homeRecycler.apply {
             id = R.id.home_genre_recycler
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 2)
             adapter = genreAdapter
             popupProvider = this@GenreListFragment
             listener = this@GenreListFragment

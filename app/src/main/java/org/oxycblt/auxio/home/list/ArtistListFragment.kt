@@ -72,6 +72,7 @@ class ArtistListFragment :
 
         binding.homeRecycler.apply {
             id = R.id.home_artist_recycler
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 2)
             adapter = artistAdapter
             popupProvider = this@ArtistListFragment
             listener = this@ArtistListFragment

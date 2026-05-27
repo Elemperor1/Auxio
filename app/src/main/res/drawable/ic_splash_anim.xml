@@ -43,7 +43,7 @@ Z" />
                     android:fillColor="@android:color/transparent"
                     android:pathData="m 13,17 -3,3 -3,-3 3,-3"
                     android:strokeWidth="0"
-                    android:strokeColor="#004894"
+                    android:strokeColor="#3981bc"
                     android:strokeLineCap="round"
                     android:strokeLineJoin="round" />
             </group>
@@ -59,7 +59,7 @@ Z" />
                     android:fillColor="@android:color/transparent"
                     android:pathData="M 13,10.5 V 17"
                     android:strokeWidth="0"
-                    android:strokeColor="#1a61ae"
+                    android:strokeColor="#0b497c"
                     android:strokeLineCap="round"
                     android:strokeLineJoin="round" />
             </group>
@@ -75,7 +75,7 @@ Z" />
                     android:fillColor="@android:color/transparent"
                     android:pathData="m 13,4v 6.5"
                     android:strokeWidth="0"
-                    android:strokeColor="#357ac9"
+                    android:strokeColor="#062149"
                     android:strokeLineCap="round"
                     android:strokeLineJoin="round" />
             </group>
@@ -91,7 +91,7 @@ Z" />
                     android:fillColor="@android:color/transparent"
                     android:pathData="m 13,4 4,4"
                     android:strokeWidth="0"
-                    android:strokeColor="#5093e4"
+                    android:strokeColor="#f7f242"
                     android:strokeLineCap="round"
                     android:strokeLineJoin="round" />
             </group>

@@ -9,9 +9,9 @@ plugins {
 }
 
 android {
-    namespace 'org.oxycblt.musikr'
+    namespace = 'org.oxycblt.musikr'
     compileSdk target_sdk
-    ndkVersion "$ndk_version"
+    ndkVersion = "$ndk_version"
 
     defaultConfig {
         minSdk min_sdk
@@ -35,18 +35,18 @@ android {
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
-            version "3.22.1"
+            version = "3.22.1"
         }
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
 
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
     lint {
         targetSdk 36
@@ -83,49 +83,56 @@ dependencies {
 }
 
 tasks.register("assembleTaglib") {
-    def jniDir = "$projectDir/src/main/cpp"
-    def pkgDir = new File("$jniDir/taglib/pkg")
-    def abis = ["x86", "x86_64", "armeabi-v7a", "arm64-v8a"]
-    def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
-    def taglibPackageComplete = {
-        abis.every { arch ->
+    def projectDirFile = project.projectDir
+    def jniDirFile = new File(projectDirFile, "src/main/cpp")
+    def pkgDirFile = new File(jniDirFile, "taglib/pkg")
+    def abisList = ["x86", "x86_64", "armeabi-v7a", "arm64-v8a"]
+    def isWindowsOS = Os.isFamily(Os.FAMILY_WINDOWS)
+
+    def taglibPackageCompleteCheck = {
+        abisList.every { arch ->
             [
-                    new File(pkgDir, "$arch/lib/libtag.a"),
-                    new File(pkgDir, "$arch/include/taglib/tstring.h"),
-                    new File(pkgDir, "$arch/include/taglib/tbytevector.h"),
-                    new File(pkgDir, "$arch/include/taglib/id3v1tag.h")
+                    new File(pkgDirFile, "$arch/lib/libtag.a"),
+                    new File(pkgDirFile, "$arch/include/taglib/tstring.h"),
+                    new File(pkgDirFile, "$arch/include/taglib/tbytevector.h"),
+                    new File(pkgDirFile, "$arch/include/taglib/id3v1tag.h")
             ].every { it.isFile() }
         }
     }
-    inputs.files(fileTree("$jniDir/taglib") {
+
+    inputs.files(fileTree(new File(jniDirFile, "taglib")) {
         exclude "pkg/**"
         exclude "build/**"
     })
-    outputs.dir(pkgDir)
-    outputs.upToDateWhen { taglibPackageComplete() }
+    outputs.dir(pkgDirFile)
+    outputs.upToDateWhen { taglibPackageCompleteCheck() }
+
+    def ndkDirProvider = project.androidComponents.sdkComponents.ndkDirectory
+    def sdkDirProvider = project.androidComponents.sdkComponents.sdkDirectory
+    def providerFactory = project.providers
 
     doLast {
-        if (taglibPackageComplete()) return
+        if (taglibPackageCompleteCheck()) return
 
-        def ndkDir = androidComponents.sdkComponents.ndkDirectory.get().asFile
-        def sdkDir = androidComponents.sdkComponents.sdkDirectory.get().asFile
-        def cmakeExe = new File(sdkDir, "cmake/3.22.1/bin/${isWindows ? 'cmake.exe' : 'cmake'}")
+        def ndkDir = ndkDirProvider.get().asFile
+        def sdkDir = sdkDirProvider.get().asFile
+        def cmakeExe = new File(sdkDir, "cmake/3.22.1/bin/${isWindowsOS ? 'cmake.exe' : 'cmake'}")
         def cmakeCommand = cmakeExe.exists() ? cmakeExe.absolutePath : "cmake"
-        def ninjaExe = new File(cmakeExe.parentFile, isWindows ? "ninja.exe" : "ninja")
+        def ninjaExe = new File(cmakeExe.parentFile, isWindowsOS ? "ninja.exe" : "ninja")
         def hasSdkNinja = cmakeExe.exists() && ninjaExe.exists()
-        def ndkToolchain = new File(jniDir, "android.toolchain.cmake")
+        def ndkToolchain = new File(jniDirFile, "android.toolchain.cmake")
         def cmakePath = { file -> file.absolutePath.replace('\\', '/') }
 
-        abis.each { arch ->
+        abisList.each { arch ->
             println "Building TagLib for $arch..."
-            def dstDir = new File("$jniDir/taglib/build/$arch")
-            def archPkgDir = new File(pkgDir, arch)
+            def dstDir = new File(jniDirFile, "taglib/build/$arch")
+            def archPkgDir = new File(pkgDirFile, arch)
             if (dstDir.exists()) {
                 dstDir.deleteDir()
             }
 
-            providers.exec {
-                workingDir "$jniDir/taglib"
+            providerFactory.exec {
+                workingDir new File(jniDirFile, "taglib")
                 def configureCommand = [
                         cmakeCommand,
                         "-B", cmakePath(dstDir),
@@ -153,11 +160,11 @@ tasks.register("assembleTaglib") {
                 commandLine configureCommand
             }.result.get().assertNormalExitValue()
 
-            providers.exec {
+            providerFactory.exec {
                 commandLine cmakeCommand, "--build", cmakePath(dstDir), "--config", "Release", "-j", Runtime.runtime.availableProcessors().toString()
             }.result.get().assertNormalExitValue()
 
-            providers.exec {
+            providerFactory.exec {
                 commandLine cmakeCommand, "--install", cmakePath(dstDir), "--config", "Release", "--prefix", cmakePath(archPkgDir), "--strip"
             }.result.get().assertNormalExitValue()
         }

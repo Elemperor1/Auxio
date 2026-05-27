@@ -69,6 +69,7 @@ class PlaylistListFragment :
 
         binding.homeRecycler.apply {
             id = R.id.home_playlist_recycler
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 2)
             adapter = playlistAdapter
             popupProvider = this@PlaylistListFragment
             listener = this@PlaylistListFragment

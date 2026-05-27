@@ -783,4 +783,53 @@
         <item name="colorSurfaceContainerHigh">@color/grey_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/grey_surfaceContainerHighest</item>
     </style>
+
+    <style name="Theme.Auxio.Official" parent="Theme.Auxio.Base">
+        <item name="colorPrimary">@color/official_primary</item>
+        <item name="colorOnPrimary">@color/official_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/official_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/official_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/official_secondary</item>
+        <item name="colorOnSecondary">@color/official_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/official_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/official_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/official_tertiary</item>
+        <item name="colorOnTertiary">@color/official_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/official_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/official_onTertiaryContainer</item>
+        <item name="colorError">@color/official_error</item>
+        <item name="colorOnError">@color/official_onError</item>
+        <item name="colorErrorContainer">@color/official_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/official_onErrorContainer</item>
+        <item name="android:colorBackground">@color/official_background</item>
+        <item name="colorOnBackground">@color/official_onBackground</item>
+        <item name="colorSurface">@color/official_surface</item>
+        <item name="colorOnSurface">@color/official_onSurface</item>
+        <item name="colorSurfaceVariant">@color/official_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/official_onSurfaceVariant</item>
+        <item name="colorOutline">@color/official_outline</item>
+        <item name="colorOutlineVariant">@color/official_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/official_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/official_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/official_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/official_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/official_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/official_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/official_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/official_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/official_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/official_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/official_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/official_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/official_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/official_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/official_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/official_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/official_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/official_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/official_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/official_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/official_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/official_surfaceContainerHighest</item>
+    </style>
 </resources>

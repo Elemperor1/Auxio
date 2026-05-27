@@ -297,6 +297,13 @@
 
     <string name="set_audio">Audio</string>
     <string name="set_audio_desc">Configure sound and playback behavior</string>
+
+    <string name="set_security">Security</string>
+    <string name="set_security_desc">Manage app lockdown settings</string>
+    <string name="set_lock_password">Lock password</string>
+    <string name="set_lock_password_desc">Set a password to lock settings and editing actions. Leave empty to disable.</string>
+    <string name="set_lock_prompt">Enter password to continue</string>
+    <string name="set_lock_incorrect">Incorrect password</string>
     <string name="set_playback">Playback</string>
     <string name="set_headset_autoplay">Headset autoplay</string>
     <string name="set_headset_autoplay_desc">Always start playing when a headset is connected (may not work on all devices)</string>
@@ -435,6 +442,7 @@
     <string name="clr_orange">Orange</string>
     <string name="clr_brown">Brown</string>
     <string name="clr_grey">Grey</string>
+    <string name="clr_official">Official</string>
     <!-- As in "Dynamic Colors"/Material You theming -->
     <string name="clr_dynamic">Dynamic</string>
 

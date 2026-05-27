@@ -72,6 +72,7 @@ class AlbumListFragment :
 
         binding.homeRecycler.apply {
             id = R.id.home_album_recycler
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 2)
             adapter = albumAdapter
             popupProvider = this@AlbumListFragment
             listener = this@AlbumListFragment

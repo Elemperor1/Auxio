@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        agp_version = '9.2.0'
+        agp_version = '9.2.1'
         kotlin_version = '2.3.10'
         kotlin_coroutines_version = '1.10.2'
         navigation_version = "2.9.7"
@@ -33,6 +33,8 @@ plugins {
     id "com.google.devtools.ksp" version '2.3.6' apply false
     // We use spotless in the root build.gradle to apply to all modules.
     id "com.diffplug.spotless" version "8.4.0" apply true
+    id 'com.google.gms.google-services' version '4.4.4' apply false
+    id 'com.google.firebase.crashlytics' version '3.0.7' apply false
 }
 
 spotless {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Official Brand Colors -->
+    <color name="official_primary">#3981bc</color>
+    <color name="official_onPrimary">#FFFFFF</color>
+    <color name="official_primaryContainer">#D2E4FF</color>
+    <color name="official_onPrimaryContainer">#001C37</color>
+
+    <color name="official_secondary">#0b497c</color>
+    <color name="official_onSecondary">#FFFFFF</color>
+    <color name="official_secondaryContainer">#D7E3F8</color>
+    <color name="official_onSecondaryContainer">#101C2B</color>
+
+    <color name="official_tertiary">#f7f242</color>
+    <color name="official_onTertiary">#000000</color>
+    <color name="official_tertiaryContainer">#FFF9C4</color>
+    <color name="official_onTertiaryContainer">#251431</color>
+
+    <color name="official_error">#BA1A1A</color>
+    <color name="official_onError">#FFFFFF</color>
+    <color name="official_errorContainer">#FFDAD6</color>
+    <color name="official_onErrorContainer">#410002</color>
+
+    <color name="official_background">#F8F9FF</color>
+    <color name="official_onBackground">#191C20</color>
+
+    <color name="official_surface">#F8F9FF</color>
+    <color name="official_onSurface">#191C20</color>
+    <color name="official_surfaceVariant">#DFE2EB</color>
+    <color name="official_onSurfaceVariant">#43474E</color>
+
+    <color name="official_outline">#73777F</color>
+    <color name="official_outlineVariant">#C3C6CF</color>
+
+    <color name="official_inverseSurface">#2E3135</color>
+    <color name="official_inverseOnSurface">#EFF0F7</color>
+    <color name="official_inversePrimary">#A1C9FD</color>
+
+    <color name="official_primaryFixed">#D2E4FF</color>
+    <color name="official_onPrimaryFixed">#001C37</color>
+    <color name="official_primaryFixedDim">#A1C9FD</color>
+    <color name="official_onPrimaryFixedVariant">#1B4975</color>
+
+    <color name="official_secondaryFixed">#D7E3F8</color>
+    <color name="official_onSecondaryFixed">#101C2B</color>
+    <color name="official_secondaryFixedDim">#BBC7DB</color>
+    <color name="official_onSecondaryFixedVariant">#3C4858</color>
+
+    <color name="official_tertiaryFixed">#FFF9C4</color>
+    <color name="official_onTertiaryFixed">#251431</color>
+    <color name="official_tertiaryFixedDim">#D7BDE4</color>
+    <color name="official_onTertiaryFixedVariant">#533F5F</color>
+
+    <color name="official_surfaceDim">#D8DAE0</color>
+    <color name="official_surfaceBright">#F8F9FF</color>
+    <color name="official_surfaceContainerLowest">#FFFFFF</color>
+    <color name="official_surfaceContainerLow">#F2F3FA</color>
+    <color name="official_surfaceContainer">#ECEEE4</color>
+    <color name="official_surfaceContainerHigh">#E7E8EE</color>
+    <color name="official_surfaceContainerHighest">#E1E2E8</color>
+
+    <!-- Dark variant background if needed -->
+    <color name="official_dark_background">#062149</color>
+
+    <color name="official_surface_black">#000000</color>
+    <color name="official_surfaceDim_black">#000000</color>
+    <color name="official_surfaceBright_black">#1b1c1e</color>
+    <color name="official_surfaceContainerLowest_black">#000000</color>
+    <color name="official_surfaceContainerLow_black">#0c0d0f</color>
+    <color name="official_surfaceContainer_black">#0e1012</color>
+    <color name="official_surfaceContainerHigh_black">#131517</color>
+    <color name="official_surfaceContainerHighest_black">#191a1c</color>
+</resources>
