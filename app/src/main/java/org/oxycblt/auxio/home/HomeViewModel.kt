@@ -272,8 +272,14 @@ constructor(
      * @param pagerPos The new position of the ViewPager2 instance.
      */
     fun synchronizeTabPosition(pagerPos: Int) {
-        L.d("Updating current tab to ${currentTabTypes[pagerPos]}")
-        _currentTabType.value = currentTabTypes[pagerPos]
+        val currentTab = currentTabTypes.getOrNull(pagerPos)
+        if (currentTab == null) {
+            L.w("Ignoring invalid tab position $pagerPos for ${currentTabTypes.size} tabs")
+            return
+        }
+
+        L.d("Updating current tab to $currentTab")
+        _currentTabType.value = currentTab
     }
 
     /**
