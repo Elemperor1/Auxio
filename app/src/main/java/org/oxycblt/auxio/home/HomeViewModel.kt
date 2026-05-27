@@ -91,7 +91,7 @@ constructor(
      * A list of [Artist]s, sorted by the preferred [Sort], to be shown in the home view. Note that
      * if "Hide collaborators" is on, this list will not include collaborator [Artist]s.
      */
-    val artistList: MutableStateFlow<List<Artist>>
+    val artistList: StateFlow<List<Artist>>
         get() = _artistList
 
     private val _artistInstructions = MutableEvent<UpdateInstructions>()
@@ -141,10 +141,10 @@ constructor(
      * A list of [MusicType] corresponding to the current [Tab] configuration, excluding invisible
      * [Tab]s.
      */
-    var currentTabTypes = homeGenerator.tabs()
+    var currentTabTypes = currentHomeTabs()
         private set
 
-    private val _currentTabType = MutableStateFlow(currentTabTypes[0])
+    private val _currentTabType = MutableStateFlow(currentTabTypes.first())
     /** The [MusicType] of the currently shown [Tab]. */
     val currentTabType: StateFlow<MusicType> = _currentTabType
 
@@ -208,9 +208,18 @@ constructor(
     }
 
     override fun invalidateTabs() {
-        currentTabTypes = homeGenerator.tabs()
+        currentTabTypes = currentHomeTabs()
+        if (_currentTabType.value !in currentTabTypes) {
+            _currentTabType.value = currentTabTypes.first()
+        }
         _shouldRecreate.put(Unit)
     }
+
+    private fun currentHomeTabs() =
+        homeGenerator.tabs().ifEmpty {
+            L.w("No visible home tabs configured, defaulting to Songs")
+            listOf(MusicType.SONGS)
+        }
 
     /**
      * Apply a new [Sort] to [songList].
