@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package org.oxycblt.auxio.home
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.parcelize.Parcelize
 import org.oxycblt.auxio.home.tabs.Tab
 import org.oxycblt.auxio.list.ListSettings
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
@@ -127,11 +127,11 @@ constructor(
         get() = _empty
 
     private val _playlistInstructions = MutableEvent<UpdateInstructions>()
-    /** Instructions for how to update [genreList] in the UI. */
+    /** Instructions for how to update [playlistList] in the UI. */
     val playlistInstructions: Event<UpdateInstructions>
         get() = _playlistInstructions
 
-    /** The current [Sort] used for [genreList]. */
+    /** The current [Sort] used for [playlistList]. */
     val playlistSort: Sort
         get() = listSettings.playlistSort
 
